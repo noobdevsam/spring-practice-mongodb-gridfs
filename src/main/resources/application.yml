@@ -1,6 +1,9 @@
 spring:
     application:
         name: spring-practice-mongodb-gridfs
+    threads:
+        virtual:
+            enabled: true
     servlet:
         multipart:
             max-file-size: 100MB
@@ -8,12 +11,7 @@ spring:
 
     data:
         mongodb:
-            database: mydatabase
-            host: localhost
-            port: 27017
-            username: root
-            password: secret
-
+            uri: mongodb://myuser:mypassword@localhost:27017/mydatabase?authSource=admin
 
 logging:
     level:

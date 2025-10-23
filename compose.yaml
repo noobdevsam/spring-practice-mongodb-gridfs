@@ -2,8 +2,10 @@ services:
     mongodb:
         image: bitnami/mongodb:latest
         environment:
-            - 'MONGODB_DATABASE=mydatabase'
-            - 'MONGODB_ROOT_PASSWORD=secret'
+            - MONGODB_DATABASE=mydatabase
+            - MONGODB_ROOT_PASSWORD=secret
+            - MONGODB_USERNAME=myuser
+            - MONGODB_PASSWORD=mypassword
         ports:
             - '27017:27017'
         volumes:
