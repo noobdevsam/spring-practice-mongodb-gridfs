@@ -57,4 +57,14 @@ public class DocumentMetadata {
         result = 31 * result + Objects.hashCode(owner);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "DocumentMetadata{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", owner='" + owner + '\'' +
+                '}';
+    }
+
 }
