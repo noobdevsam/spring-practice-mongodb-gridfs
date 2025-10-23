@@ -48,4 +48,10 @@ public class GridFsController {
                 .body(new InputStreamResource(resource.getInputStream()));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable String id) {
+        gridFsService.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }
