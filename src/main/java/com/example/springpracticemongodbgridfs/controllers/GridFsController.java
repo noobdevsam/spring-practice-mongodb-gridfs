@@ -2,6 +2,7 @@ package com.example.springpracticemongodbgridfs.controllers;
 
 import com.example.springpracticemongodbgridfs.services.GridFsService;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +16,17 @@ import java.io.IOException;
 public class GridFsController {
 
     private final GridFsService gridFsService;
+    private final MongoTemplate mongoTemplate;
 
-    public GridFsController(GridFsService gridFsService) {
+    public GridFsController(GridFsService gridFsService, MongoTemplate mongoTemplate) {
+        this.mongoTemplate = mongoTemplate;
         this.gridFsService = gridFsService;
+    }
+
+    @GetMapping("/ping")
+    public String ping() {
+        mongoTemplate.getDb().runCommand(new org.bson.Document("ping", 1));
+        return " Mongo connected as " + mongoTemplate.getDb().getName();
     }
 
     @PostMapping("/upload")
