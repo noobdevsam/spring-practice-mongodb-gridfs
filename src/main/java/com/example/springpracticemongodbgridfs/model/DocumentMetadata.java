@@ -3,6 +3,7 @@ package com.example.springpracticemongodbgridfs.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Document(collection = "doc_metadata")
@@ -40,5 +41,20 @@ public class DocumentMetadata {
 
     public void setOwner(String owner) {
         this.owner = owner;
+    }
+
+    @Override
+    public final boolean equals(Object o) {
+        if (!(o instanceof DocumentMetadata that)) return false;
+
+        return Objects.equals(id, that.id) && Objects.equals(title, that.title) && Objects.equals(owner, that.owner);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hashCode(id);
+        result = 31 * result + Objects.hashCode(title);
+        result = 31 * result + Objects.hashCode(owner);
+        return result;
     }
 }
