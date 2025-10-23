@@ -27,8 +27,6 @@ public class GridFsServiceImpl implements GridFsService {
 
     @Override
     public String store(MultipartFile file, String uploader) throws IOException {
-//
-//        var metadata = new BasicQuery("{}");
 
         // GridFsTemplate.store supports InputStream, filename, contentType, metadata (as org.bson.Document)
         var meta = new Document();
@@ -60,15 +58,18 @@ public class GridFsServiceImpl implements GridFsService {
                 )
         );
 
-        if (gridFsFile == null) {
-            return null;
-        }
-
         return gridFsOperations.getResource(gridFsFile);
     }
 
     @Override
     public void deleteById(UUID id) {
-
+        gridFsTemplate.delete(
+                new Query(
+                        Criteria.where("_id")
+                                .is(
+                                        new ObjectId(id.toString())
+                                )
+                )
+        );
     }
 }
