@@ -14,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -34,22 +33,23 @@ class GridFsServiceImplTest {
 
     @Test
     void store_shouldStoreFileAndReturnId() throws IOException {
-        MultipartFile file = mock(MultipartFile.class);
+        var file = mock(MultipartFile.class);
         when(file.getOriginalFilename()).thenReturn("test.txt");
         when(file.getContentType()).thenReturn("text/plain");
         when(file.getSize()).thenReturn(123L);
         when(file.getInputStream()).thenReturn(new ByteArrayInputStream("data".getBytes()));
 
-        ObjectId objectId = new ObjectId();
-        when(gridFsTemplate.store(any(), anyString(), anyString(), any(Document.class))).thenReturn(objectId);
+        var objectId = new ObjectId();
+        when(gridFsTemplate.store(any(), anyString(), anyString(), any(Document.class)))
+                .thenReturn(objectId);
 
-        String result = service.store(file, "uploader1");
-
+        var result = service.store(file, "uploader1");
         assertEquals(objectId.toHexString(), result);
 
-        ArgumentCaptor<Document> metaCaptor = ArgumentCaptor.forClass(Document.class);
+        var metaCaptor = ArgumentCaptor.forClass(Document.class);
         verify(gridFsTemplate).store(any(), eq("test.txt"), eq("text/plain"), metaCaptor.capture());
-        Document meta = metaCaptor.getValue();
+
+        var meta = metaCaptor.getValue();
         assertEquals("uploader1", meta.get("uploader"));
         assertEquals("test.txt", meta.get("originalFilename"));
         assertEquals(123L, meta.get("size"));
@@ -57,7 +57,7 @@ class GridFsServiceImplTest {
 
     @Test
     void store_shouldThrowIOException() throws IOException {
-        MultipartFile file = mock(MultipartFile.class);
+        var file = mock(MultipartFile.class);
         when(file.getInputStream()).thenThrow(new IOException("fail"));
 
         assertThrows(IOException.class, () -> service.store(file, "uploader1"));
@@ -65,15 +65,14 @@ class GridFsServiceImplTest {
 
     @Test
     void getFileAsResource_shouldReturnResource() {
-        UUID uuid = UUID.randomUUID();
-        ObjectId objectId = new ObjectId(uuid.toString().replace("-", "").substring(0, 24));
+        var hexId = new ObjectId().toHexString();
         var gridFsFile = mock(com.mongodb.client.gridfs.model.GridFSFile.class);
         var resource = mock(GridFsResource.class);
 
         when(gridFsTemplate.findOne(any(Query.class))).thenReturn(gridFsFile);
         when(gridFsOperations.getResource(gridFsFile)).thenReturn(resource);
 
-        GridFsResource result = service.getFileAsResource(uuid);
+        var result = service.getFileAsResource(hexId);
 
         assertEquals(resource, result);
         verify(gridFsTemplate).findOne(any(Query.class));
@@ -82,12 +81,13 @@ class GridFsServiceImplTest {
 
     @Test
     void deleteById_shouldDeleteFile() {
-        UUID uuid = UUID.randomUUID();
-        service.deleteById(uuid);
+        var hexId = new ObjectId().toHexString();
+        service.deleteById(hexId);
 
-        ArgumentCaptor<Query> queryCaptor = ArgumentCaptor.forClass(Query.class);
+        var queryCaptor = ArgumentCaptor.forClass(Query.class);
         verify(gridFsTemplate).delete(queryCaptor.capture());
-        Query query = queryCaptor.getValue();
+
+        var query = queryCaptor.getValue();
         assertNotNull(query);
     }
 }
