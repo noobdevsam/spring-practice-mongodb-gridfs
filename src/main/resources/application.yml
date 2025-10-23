@@ -1,0 +1,15 @@
+spring:
+    application:
+        name: spring-practice-mongodb-gridfs
+
+    data:
+        mongodb:
+            database: mydatabase
+            host: localhost
+            port: 27017
+            username: admin
+            password: admin
+
+logging:
+    level:
+        org.springframework.data.mongodb: DEBUG
