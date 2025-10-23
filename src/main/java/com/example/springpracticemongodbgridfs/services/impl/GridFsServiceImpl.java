@@ -2,7 +2,9 @@ package com.example.springpracticemongodbgridfs.services.impl;
 
 import com.example.springpracticemongodbgridfs.services.GridFsService;
 import org.bson.Document;
-import org.springframework.data.mongodb.core.query.BasicQuery;
+import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsOperations;
 import org.springframework.data.mongodb.gridfs.GridFsResource;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
@@ -25,8 +27,8 @@ public class GridFsServiceImpl implements GridFsService {
 
     @Override
     public String store(MultipartFile file, String uploader) throws IOException {
-
-        var metadata = new BasicQuery("{}");
+//
+//        var metadata = new BasicQuery("{}");
 
         // GridFsTemplate.store supports InputStream, filename, contentType, metadata (as org.bson.Document)
         var meta = new Document();
@@ -48,7 +50,21 @@ public class GridFsServiceImpl implements GridFsService {
 
     @Override
     public GridFsResource getFileAsResource(UUID id) {
-        return null;
+
+        var gridFsFile = gridFsTemplate.findOne(
+                new Query(
+                        Criteria.where("_id")
+                                .is(
+                                        new ObjectId(id.toString())
+                                )
+                )
+        );
+
+        if (gridFsFile == null) {
+            return null;
+        }
+
+        return gridFsOperations.getResource(gridFsFile);
     }
 
     @Override
