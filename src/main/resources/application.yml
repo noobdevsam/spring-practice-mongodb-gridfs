@@ -11,7 +11,7 @@ spring:
 
     data:
         mongodb:
-            uri: mongodb://myuser:mypassword@localhost:27017/mydatabase?authSource=admin
+            uri: mongodb://myuser:mypassword@localhost:27017/mydatabase?authSource=mydatabase
 
 logging:
     level:
