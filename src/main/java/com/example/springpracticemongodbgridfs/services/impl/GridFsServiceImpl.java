@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.UUID;
 
 @Service
 public class GridFsServiceImpl implements GridFsService {
@@ -47,13 +46,13 @@ public class GridFsServiceImpl implements GridFsService {
     }
 
     @Override
-    public GridFsResource getFileAsResource(UUID id) {
+    public GridFsResource getFileAsResource(String id) {
 
         var gridFsFile = gridFsTemplate.findOne(
                 new Query(
                         Criteria.where("_id")
                                 .is(
-                                        new ObjectId(id.toString())
+                                        new ObjectId(id)
                                 )
                 )
         );
@@ -62,12 +61,12 @@ public class GridFsServiceImpl implements GridFsService {
     }
 
     @Override
-    public void deleteById(UUID id) {
+    public void deleteById(String id) {
         gridFsTemplate.delete(
                 new Query(
                         Criteria.where("_id")
                                 .is(
-                                        new ObjectId(id.toString())
+                                        new ObjectId(id)
                                 )
                 )
         );
