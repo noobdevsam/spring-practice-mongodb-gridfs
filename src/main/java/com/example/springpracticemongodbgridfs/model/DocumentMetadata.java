@@ -4,17 +4,17 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Objects;
-import java.util.UUID;
 
 @Document(collection = "doc_metadata")
 public class DocumentMetadata {
 
     @Id
-    private UUID id = UUID.randomUUID();
+    private String id;
     private String title;
     private String owner;
 
-    public DocumentMetadata(String title, String owner) {
+    public DocumentMetadata(String id, String title, String owner) {
+        this.id = id;
         this.title = title;
         this.owner = owner;
     }
@@ -23,8 +23,12 @@ public class DocumentMetadata {
         this.title = title;
     }
 
-    public UUID getId() {
+    public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getTitle() {
