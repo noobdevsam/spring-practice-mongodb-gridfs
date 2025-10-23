@@ -4,8 +4,6 @@ services:
         environment:
             - 'MONGODB_DATABASE=mydatabase'
             - 'MONGODB_ROOT_PASSWORD=secret'
-            - 'MONGODB_PASSWORD=admin'
-            - 'MONGODB_USERNAME=admin'
         ports:
             - '27017:27017'
         volumes:

@@ -11,8 +11,9 @@ spring:
             database: mydatabase
             host: localhost
             port: 27017
-            username: admin
-            password: admin
+            username: root
+            password: secret
+
 
 logging:
     level:
